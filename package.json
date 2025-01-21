@@ -1,0 +1,60 @@
+{
+  "name": "@dlenroc/vitest-serenity-js",
+  "version": "0.1.0",
+  "description": "Serenity/JS test runner adapter for Vitest, enabling the use of the Screenplay Pattern in Vitest-based test suites and leveraging Serenity/JS reporting capabilities",
+  "keywords": [
+    "browser",
+    "component",
+    "e2e",
+    "end-to-end",
+    "integration",
+    "serenity",
+    "serenity-js",
+    "screenplay",
+    "screenplay-pattern",
+    "runner",
+    "vitest",
+    "tdd",
+    "bdd",
+    "test",
+    "testing"
+  ],
+  "homepage": "https://github.com/dlenroc/vitest-serenity-js#readme",
+  "bugs": {
+    "url": "https://github.com/dlenroc/vitest-serenity-js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dlenroc/vitest-serenity-js.git"
+  },
+  "license": "MIT",
+  "author": "Corneliu Duplachi",
+  "type": "module",
+  "exports": {
+    "./setup": {
+      "types": "./dist/setup.d.ts",
+      "import": "./dist/setup.js",
+      "default": "./dist/setup.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pkgroll --clean-dist"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.4",
+    "@tsconfig/strictest": "^2.0.5",
+    "@types/node": "^22.10.7",
+    "pkgroll": "^2.6.1",
+    "typescript": "^5.7.3"
+  },
+  "peerDependencies": {
+    "@serenity-js/core": "^3.0.0",
+    "vitest": "^3.0.0"
+  },
+  "engines": {
+    "node": "^20.0.0 || >=22.0.0"
+  }
+}
