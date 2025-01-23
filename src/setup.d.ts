@@ -9,16 +9,6 @@ declare module 'vitest' {
   interface ProvidedContext {
     serenity?: {
       /**
-       * A [class description](https://serenity-js.org/api/core/#ClassDescription)
-       * that represent a [cast](https://serenity-js.org/api/core/class/Cast/)
-       * of [actors](https://serenity-js.org/api/core/class/Actor/)
-       * to be used when [`actorCalled`](https://serenity-js.org/api/core/function/actorCalled/)
-       * and [`actorInTheSpotlight`](https://serenity-js.org/api/core/function/actorInTheSpotlight/)
-       * functions are called.
-       */
-      actors?: ClassDescription;
-
-      /**
        * A list of [class descriptions](https://serenity-js.org/api/core/#ClassDescription)
        * that build or represent [stage crew member builders](https://serenity-js.org/api/core/interface/StageCrewMemberBuilder/)
        * or [stage crew members](https://serenity-js.org/api/core/interface/StageCrewMember/)
@@ -53,27 +43,6 @@ declare module 'vitest' {
        * a scenario timeout, which should be configured in your test runner.
        */
       interactionTimeout?: number;
-
-      /**
-       * A [class description](https://serenity-js.org/api/core/#ClassDescription)
-       * that represent a [`DiffFormatter`](https://serenity-js.org/api/core/interface/DiffFormatter/)
-       * that should be used by the [`ErrorFactory`](https://serenity-js.org/api/core/class/ErrorFactory/)
-       * and the ability to [`RaiseErrors`](https://serenity-js.org/api/core/class/RaiseErrors/)
-       * when generating diffs included in [`RuntimeError`](https://serenity-js.org/api/core/class/RuntimeError/)
-       * objects.
-       *
-       * By default, Serenity/JS uses [`NoOpDiffFormatter`](https://serenity-js.org/api/core/class/NoOpDiffFormatter/)
-       */
-      diffFormatter?: ClassDescription;
-
-      /**
-       * A [class description](https://serenity-js.org/api/core/#ClassDescription)
-       * that represent an output stream to be injected into
-       * [stage crew member builders](https://serenity-js.org/api/core/interface/StageCrewMemberBuilder/)
-       *
-       * Defaults to [`process.stdout`](https://nodejs.org/api/process.html#process_process_stdout).
-       */
-      outputStream?: ClassDescription;
 
       /**
        * The name of the default [`actor`](https://serenity-js.org/api/core/class/Actor/)

@@ -1,20 +1,16 @@
 import {
   AssertionError,
   Cast,
-  ConfigurationError,
   Duration,
   ErrorSerialiser,
   ImplementationPendingError,
-  NoOpDiffFormatter,
   Serenity,
   TakeNotes,
   TestCompromisedError,
   UnknownError,
   type Actor,
-  type DiffFormatter,
   type StageCrewMember,
 } from '@serenity-js/core';
-import type { OutputStream } from '@serenity-js/core/lib/adapter';
 import {
   RetryableSceneDetected,
   SceneFinished,
@@ -32,11 +28,8 @@ import {
   type DomainEvent,
 } from '@serenity-js/core/lib/events';
 import {
-  ClassDescriptionParser,
-  ClassLoader,
   FileSystem,
   FileSystemLocation,
-  ModuleLoader,
   Path,
   RequirementsHierarchy,
 } from '@serenity-js/core/lib/io';
@@ -65,11 +58,6 @@ import {
   type RunnerTestSuite,
 } from 'vitest';
 
-const classLoader = new ClassLoader(
-  new ModuleLoader(process.cwd()),
-  new ClassDescriptionParser()
-);
-
 const requirementsHierarchy = new RequirementsHierarchy(
   new FileSystem(new Path(process.cwd()))
 );
@@ -81,63 +69,15 @@ const interactionTimeout = Duration.ofMilliseconds(
   config?.interactionTimeout ?? 5000
 );
 
-const actors = (() => {
-  if (!config?.actors) {
-    return Cast.where((actor) => actor.whoCan(TakeNotes.usingAnEmptyNotepad()));
-  }
-
-  try {
-    return classLoader.instantiate<Cast>(config.actors);
-  } catch (cause) {
-    throw new ConfigurationError(
-      'Invalid "serenity.actors" configuration',
-      normalizeError(cause)
-    );
-  }
-})();
-
-const diffFormatter = (() => {
-  if (!config?.diffFormatter) {
-    return new NoOpDiffFormatter();
-  }
-
-  try {
-    return classLoader.instantiate<DiffFormatter>(config?.diffFormatter);
-  } catch (cause) {
-    throw new ConfigurationError(
-      'Invalid "serenity.diffFormatter" configuration',
-      normalizeError(cause)
-    );
-  }
-})();
-
-const outputStream = (() => {
-  if (!config?.outputStream) {
-    return process.stdout;
-  }
-
-  try {
-    return classLoader.instantiate<OutputStream>(config?.outputStream);
-  } catch (cause) {
-    throw new ConfigurationError(
-      'Invalid "serenity.outputStream" configuration',
-      normalizeError(cause)
-    );
-  }
-})();
-
 beforeEach(({ task, onTestFinished }) => {
   if (!('context' in task)) return;
 
   const serenity = new Serenity();
 
   serenity.configure({
-    actors,
     crew: [new ErrorProcessor(), ...(config?.crew ?? [])],
     cueTimeout,
     interactionTimeout,
-    diffFormatter,
-    outputStream,
   });
 
   {
@@ -162,7 +102,9 @@ beforeEach(({ task, onTestFinished }) => {
       configurable: true,
     });
 
-    let cast = actors;
+    let cast = Cast.where((actor) =>
+      actor.whoCan(TakeNotes.usingAnEmptyNotepad())
+    );
     Object.defineProperty(task.context, 'actors', {
       get: () => cast,
       set: (value) => stage.engage((cast = value)),

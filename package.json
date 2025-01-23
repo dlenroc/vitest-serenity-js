@@ -1,6 +1,6 @@
 {
   "name": "@dlenroc/vitest-serenity-js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Serenity/JS test runner adapter for Vitest, enabling the use of the Screenplay Pattern in Vitest-based test suites and leveraging Serenity/JS reporting capabilities",
   "keywords": [
     "browser",
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/node": "^22.10.7",
+    "@types/node": "^22.10.9",
     "pkgroll": "^2.6.1",
     "typescript": "^5.7.3"
   },
