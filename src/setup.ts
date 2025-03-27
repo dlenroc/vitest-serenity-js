@@ -1,3 +1,5 @@
+/// <reference path="./setup.d.ts" />
+
 import {
   AssertionError,
   Cast,
@@ -26,13 +28,13 @@ import {
   TestSuiteFinished,
   TestSuiteStarts,
   type DomainEvent,
-} from '@serenity-js/core/lib/events';
+} from '@serenity-js/core/lib/events/index.js';
 import {
   FileSystem,
   FileSystemLocation,
   Path,
   RequirementsHierarchy,
-} from '@serenity-js/core/lib/io';
+} from '@serenity-js/core/lib/io/index.js';
 import {
   ActivityDetails,
   ArbitraryTag,
@@ -49,7 +51,7 @@ import {
   ScenarioDetails,
   Tags,
   TestSuiteDetails,
-} from '@serenity-js/core/lib/model';
+} from '@serenity-js/core/lib/model/index.js';
 import process from 'node:process';
 import {
   beforeEach,
@@ -362,9 +364,20 @@ class ErrorProcessor implements StageCrewMember {
   notifyOf(event: DomainEvent): void {
     const { outcome } = event as { outcome?: { error?: unknown } };
     if (outcome?.error instanceof Error) {
-      outcome.error = ErrorSerialiser.deserialise(
-        ErrorSerialiser.serialise(outcome.error)
-      );
+      let serializedError: string;
+
+      try {
+        serializedError = ErrorSerialiser.serialise(outcome.error);
+      } catch {
+        serializedError = ErrorSerialiser.serialise(
+          ErrorSerialiser.deserialiseFromStackTrace(
+            outcome.error.stack ??
+              `${outcome.error.name}: ${outcome.error.message}`
+          )
+        );
+      }
+
+      outcome.error = ErrorSerialiser.deserialise(serializedError);
     }
   }
 }
